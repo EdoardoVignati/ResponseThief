@@ -29,18 +29,19 @@ $ ./response-thief.py inputfile.txt outputfile.txt
 where ```inputfile.txt``` is a list of URLs without the protocol and ```outputfile.txt``` is a path to an empty file.
 
 Example:
-- www.mywebsite.com
-- mywebsite.com
-- foo.bar.anotherwebsite.com
+- www.github.com
+- github.com
+- foo.bar.gitlab.com
 
 ## Output
 The output is built in this format like:
-- [200] www.mysite.com
-- [301] www.myfakesite.com
+- [200] www.github.com
+- [301] foo.gitlab.com
 - ...
 
 ## Print on stdout
 Red URL: error retrieving URL
+
 White URL: ok, a response code has been registered 
 
 ## Errors
