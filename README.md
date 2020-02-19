@@ -1,5 +1,5 @@
 # ResponseThief
-Multi threaded check for status codes from a domain list
+Multi threaded check for status codes from a URLs list
 
 
      ____                                     _____ _     _       __ 
@@ -28,16 +28,21 @@ $ ./response-thief.py inputfile.txt outputfile.txt
 
 where ```inputfile.txt``` is a list of URLs without the protocol and ```outputfile.txt``` is a path to an empty file.
 
-Example:
-- www.github.com
-- github.com
-- foo.bar.gitlab.com
+Example of input file:
+```
+www.github.com
+github.com
+foo.bar.gitlab.com
+```
+
 
 ## Output
 The output is built in this format like:
-- [200] www.github.com
-- [301] foo.gitlab.com
-- ...
+```
+[200] www.github.com
+[301] foo.gitlab.com
+...
+```
 
 ## Print on stdout
 Red URL: error retrieving URL
