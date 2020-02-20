@@ -60,7 +60,7 @@ sleeptime=0
 def signal_handler(sig, frame):
 	sys.stdout.flush()
 	print('\n\nAborted!')
-	os._exit(0)
+	os._exit(130)
 signal.signal(signal.SIGINT, signal_handler)
 
 # Check URL
