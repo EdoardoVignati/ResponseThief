@@ -21,7 +21,7 @@ cprint("""
 # Arguments check
 if len(sys.argv)!=3:
 	print("Given a list of URLs, tests the response codes and write them into a file")
-	print("URLs must not contain the protocol ('http://' or 'ftp://'...)\n")
+	print("URLs must not contain the protocol ('http://' or 'https://')\n")
 	print("Usage:\n\t$ ./response-thief.py </path/to/inputfile.txt> </path/to/outputfile.txt>\n")
 	exit()
 
