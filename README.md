@@ -36,17 +36,20 @@ foo.bar.gitlab.com
 
 
 ## Output
-The output is built in this format like:
+The output is built in this format:
 ```
 [200] www.github.com
 [301] foo.gitlab.com
 ...
 ```
+Verbosity (--stdout) has 3 different levels:
+- enabled (print everything)
+- less (print important information)
+- disable (do not print anything)
 
 ## Print on stdout
-Red URL: error retrieving URL
-
-White URL: ok, a response code has been registered 
+- Red URL: error retrieving URL
+- White URL: ok, a response code has been registered 
 
 ## Errors
 - [Timeout error] : cannot retrieve the webpage within 5 seconds
