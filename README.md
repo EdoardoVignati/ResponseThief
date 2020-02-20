@@ -1,6 +1,5 @@
 # ResponseThief
-Multi threaded check for status codes from a URLs list
-
+ResponseThief visits URLs from a list and returns the http responses. 
 
      ____                                     _____ _     _       __ 
     |  _ \ ___  ___ _ __   ___  _ __  ___  __|_   _| |__ (_) ___ / _|
@@ -53,6 +52,7 @@ White URL: ok, a response code has been registered
 - [Timeout error] : cannot retrieve the webpage within 5 seconds
 - [Connection error] : cannot open or find the domain
 - [Unknown error] : don't know what's happening :)
+
 
 ![Demo](https://raw.githubusercontent.com/EdoardoVignati/ResponseThief/master/responsethief.png)
  
