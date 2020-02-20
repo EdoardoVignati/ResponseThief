@@ -1,13 +1,12 @@
 # ResponseThief
-ResponseThief visits URLs from a list and returns the http responses. 
+ResponseThief visits URLs from a list and returns the http response codes. 
 
-     ____                                     _____ _     _       __ 
-    |  _ \ ___  ___ _ __   ___  _ __  ___  __|_   _| |__ (_) ___ / _|
-    | |_) / _ \/ __| '_ \ / _ \| '_ \/ __|/ _ \| | | '_ \| |/ _ \ |_ 
-    |  _ \  __/\__ \ |_) | (_) | | | \__ \  __/| | | | | | |  __/  _|
-    |_| \_\___||___/  __/ \___/|_| |_|___/\___||_| |_| |_|_|\___|_|  
-                   |_|             
-                                                   by @EdoardoVignati     
+     ___                            _____ _    _      __ 
+    | _ \___ ____ __ ___ _ _  _____|_   _| |_ (_)___ / _|
+    |   / -_(_-| '_ / _ | ' \(_-/ -_)| | | ' \| / -_|  _|
+    |_|_\___/__| .__\___|_||_/__\___||_| |_||_|_\___|_|  
+               |_|                                       	                               
+                                       by @EdoardoVignati 
 
 ## Requirements for Python3
 - import requests
