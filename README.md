@@ -9,12 +9,14 @@ ResponseThief visits URLs from a list and returns the http response codes.
                                        by @EdoardoVignati 
 
 ## Requirements for Python3
-- import requests
-- import threading
-- import time
-- import os
-- import sys
 - from termcolor import colored, cprint
+- import threading
+- import requests
+- import argparse
+- import signal
+- import time
+- import sys
+- import os
 - import re
 
 ## Usage

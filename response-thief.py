@@ -3,6 +3,7 @@ from termcolor import colored, cprint
 import threading
 import requests
 import argparse
+import signal
 import time
 import sys
 import os
@@ -44,7 +45,7 @@ if(stdout != "disabled"):
 
 if inputfile==None or outputfile==None:
 	print(parser.print_help())
-	exit()
+	exit(1)
 
 responses=[]
 launched_threads=[]
@@ -55,8 +56,12 @@ summary={}
 maxUrl=0
 sleeptime=0
 
-
-
+# Manage CTRL+c
+def signal_handler(sig, frame):
+	sys.stdout.flush()
+	print('\n\nAborted!')
+	os._exit(0)
+signal.signal(signal.SIGINT, signal_handler)
 
 # Check URL
 def checkUrl(url):
