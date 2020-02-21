@@ -31,7 +31,8 @@ lock = threading.Lock()
 
 
 def isError(s):
-	return s!="Connection error" and s!="Timeout error" and s!="Unknown error"
+	error_status=["Connection error", "Timeout error", "Unknown error"]
+	return s in error_status
 
 
 def signal_handler(sig, frame):
@@ -82,14 +83,15 @@ def counted(url, error):
 	sys.stdout.write("Visited... " + str(("{:.2f}").format(round((done/total)*100,2))) + "%" + padding + "\r")
 	sys.stdout.flush()
 	
-	if not errors:
-		if not error:
-			print("Visited " + colored(str(done) + "/" + str(total),"green") + " -> " + url + padding)
-	elif errors:
-		if error:
-			print("Visited " + colored(str(done) + "/" + str(total),"green") + " -> " + colored(url,"red") + padding)
-		else:
-			print("Visited " + colored(str(done) + "/" + str(total),"green") + " -> " + url + padding)
+	if stdout=="enabled":
+		if not errors:
+			if not error:
+				print("Visited " + colored(str(done) + "/" + str(total),"green") + " -> " + url + padding)
+		elif errors:
+			if error:
+				print("Visited " + colored(str(done) + "/" + str(total),"green") + " -> " + colored(url,"red") + padding)
+			else:
+				print("Visited " + colored(str(done) + "/" + str(total),"green") + " -> " + url + padding)
 	lock.release()	
 	return done
 
@@ -153,6 +155,7 @@ def writeOutput(outputfile):
 
 	global responses
 	global stdout
+	global errors
 
 	try:
 		os.remove(outputfile)
@@ -163,15 +166,16 @@ def writeOutput(outputfile):
 	i=0.0
 
 	for u in responses:
-		if isError(u[0]):
-			if errors:		
+		if not errors:		
+			if not isError(u[1]):				
 				out.write("[" + str(u[1]) + "] " + u[0] + "\n")
 		else:
 			out.write("[" + str(u[1]) + "] " + u[0] + "\n")
 		
 		i+=1.0
 		if(stdout=="enabled"):
-			sys.stdout.write("Writing... " + str(format(round((i/length)*100,2))) + "%\r")
+			padding=(" " *(maxUrl+27))
+			sys.stdout.write("Writing... " + str(format(round((i/length)*100,2))) + "%" + padding + "\r")
 			sys.stdout.flush()
 	out.close()
 
@@ -182,7 +186,7 @@ def printSummary():
 		for k in summary.keys():
 			print("Response [" + str(k) + "] -> " + str(summary[k]) + " times")
 		print("")
-		print("Output in " + outputfile)
+		print("Output saved in '" + os.path.abspath(outputfile) + "'")
 
 
 if __name__ == "__main__":
