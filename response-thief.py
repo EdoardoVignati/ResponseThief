@@ -28,10 +28,11 @@ total=0;
 summary={}
 maxUrl=0
 lock = threading.Lock()
+filter_status=None
 
 
 def isError(s):
-	error_status=["Connection error", "Timeout error", "Unknown error"]
+	error_status=["Connection_error", "Timeout_error", "Unknown_error"]
 	return s in error_status
 
 
@@ -56,16 +57,16 @@ def visited(url, status):
 
 	global summary
 	global responses
-
-	responses.append((url,status.status_code))
-	if status.status_code in summary.keys():
-		summary[status.status_code]=summary[status.status_code]+1
-	else:
-		summary[status.status_code]=1
+	if (url,status.status_code) not in responses: 
+		responses.append((url,status.status_code))
+		if status.status_code in summary.keys():
+			summary[status.status_code]=summary[status.status_code]+1
+		else:
+			summary[status.status_code]=1
 	lock.release()
 
 
-def counted(url, error):
+def counted(url, status):
 	if(stdout=="disabled"):
 		return
 
@@ -76,6 +77,7 @@ def counted(url, error):
 	global maxUrl
 	global total
 	global errors
+	global filter_status
 
 	done+=1
 	padding=(" " *(maxUrl-len(url)+27))
@@ -84,15 +86,22 @@ def counted(url, error):
 	sys.stdout.flush()
 	
 	if stdout=="enabled":
-		if not errors:
-			if not error:
-				print("Visited " + colored(str(done) + "/" + str(total),"green") + " -> " + url + padding)
-		elif errors:
-			if error:
-				print("Visited " + colored(str(done) + "/" + str(total),"green") + " -> " + colored(url,"red") + padding)
-			else:
-				print("Visited " + colored(str(done) + "/" + str(total),"green") + " -> " + url + padding)
-	lock.release()	
+
+		if not isError(str(status)):
+			code=status.status_code
+		else:
+			code=status
+
+		if(filter_status!=None and str(code)==filter_status) or  filter_status==None: 
+			if not errors:
+				if not isError(str(status)):
+					print("Visited " + colored(str(done) + "/" + str(total),"green") + " -> " + url + padding)
+			elif errors:
+				if isError(str(status)):
+					print("Visited " + colored(str(done) + "/" + str(total),"green") + " -> " + colored(url,"red") + padding)
+				else:
+					print("Visited " + colored(str(done) + "/" + str(total),"green") + " -> " + url + padding)
+	lock.release()
 	return done
 
 
@@ -102,32 +111,31 @@ def visitThread(url, to):
 	global stdout
 		
 	try:
-		# Test HTTP
-		status = requests.get("http://"+url.strip(), timeout=to)
-		visited(url, status)
 
 		# Test HTTPS
-		status = requests.head("https://"+url.strip(), timeout=to)
-		visited(url, status)
+		status = requests.head("https://"+url.strip(), timeout=to, allow_redirects=True)
+		# Test HTTP
+		status = requests.get("http://"+url.strip(), timeout=to, allow_redirects=True)
 
 		# Url done
-		counted(url, 0)
+		visited(url, status)
+		counted(url, status)
 
 	except requests.ConnectionError:
 		lock.acquire()
-		responses.append((url,"Connection error"))
+		responses.append((url,"Connection_error"))
 		lock.release()
-		counted(url, 1)
+		counted(url, "Connection_error")
 	except requests.exceptions.Timeout:
 		lock.acquire()
-		responses.append((url,"Timeout error"))
+		responses.append((url,"Timeout_error"))
 		lock.release()
-		counted(url, 1)
+		counted(url, "Timeout_error")
 	except:
 		lock.acquire()
-		responses.append((url,"Unknown error"))
+		responses.append((url,"Unknown_error"))
 		lock.release()
-		counted(url, 1)
+		counted(url, "Unknown_error")
 
 
 def readFile(inputfile):
@@ -137,14 +145,14 @@ def readFile(inputfile):
 
 	urlList = []
 	with open(inputfile) as fp:
-		line = fp.readline()
+		line = fp.readline().strip()
 		while line:
-			if line.strip()!="" and line!="\n" and checkUrl(line):
-				urlList.append(line.strip())
+			if (line!="") and (line!="\n") and checkUrl(line) and (line not in urlList):
+				urlList.append(line)
 				total+=1
 				if(len(line.strip())>maxUrl):
 					maxUrl=len(line.strip())
-			line = fp.readline()
+			line = fp.readline().strip()
 	if stdout!="disabled":
 		print("Total URLs: " + str(total) + "\n")
 	maxUrl+=len("Launching ")+(len(str(total))*2)+1
@@ -156,6 +164,7 @@ def writeOutput(outputfile):
 	global responses
 	global stdout
 	global errors
+	global filter_status
 
 	try:
 		os.remove(outputfile)
@@ -166,11 +175,12 @@ def writeOutput(outputfile):
 	i=0.0
 
 	for u in responses:
-		if not errors:		
-			if not isError(u[1]):				
+		if(filter_status!=None and str(u[1])==filter_status) or  filter_status==None: 
+			if not errors:		
+				if not isError(u[1]):				
+					out.write("[" + str(u[1]) + "] " + u[0] + "\n")
+			else:
 				out.write("[" + str(u[1]) + "] " + u[0] + "\n")
-		else:
-			out.write("[" + str(u[1]) + "] " + u[0] + "\n")
 		
 		i+=1.0
 		if(stdout=="enabled"):
@@ -201,10 +211,13 @@ if __name__ == "__main__":
 	parser.add_argument('output', metavar='outputfile', help='path of output file. An empty file to append output.')
 	parser.add_argument('--stdout', metavar='[enabled, less, disabled]', help='edit verbosity of stdout print.')
 	parser.add_argument('--errors', metavar='[yes, no]', help='save or not errors')
+	parser.add_argument('--filter', metavar='[200, 301, ..]', help='a status code to filter')
 	args = parser.parse_args()
+
 
 	inputfile = args.input
 	outputfile = args.output
+	filter_status = args.filter
 
 	if args.stdout!=None:
 		stdout=args.stdout
@@ -220,10 +233,21 @@ if __name__ == "__main__":
 		print(parser.print_help())
 		exit(1)
 
+	try:
+		f = open(inputfile)
+	except IOError:
+		print("File not found: " + inputfile)
+		exit(1)
+	finally:
+		try:
+			f.close()
+		except Exception:
+			pass
+
 	signal.signal(signal.SIGINT, signal_handler)
 
 	urlList = readFile(inputfile)
-	
+
 	# Launch threads
 	launched_threads=[]
 	visit_timeout=5
@@ -239,7 +263,6 @@ if __name__ == "__main__":
 			launched_threads.append(t)
 			time.sleep(sleeptime)
 			t.start()
-
 
 	# Wait for termination
 	for t in launched_threads:
