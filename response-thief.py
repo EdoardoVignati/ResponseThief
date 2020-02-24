@@ -28,6 +28,7 @@ total=0;
 summary={}
 maxUrl=0
 lock = threading.Lock()
+print_lock = threading.Lock()
 filter_status=None
 
 
@@ -82,6 +83,7 @@ def counted(url, status):
 	done+=1
 	padding=(" " *(maxUrl-len(url)+27))
 
+	print_lock.acquire()
 	sys.stdout.write("Visited... " + str(("{:.2f}").format(round((done/total)*100,2))) + "%" + padding + "\r")
 	sys.stdout.flush()
 	
@@ -101,6 +103,7 @@ def counted(url, status):
 					print("Visited " + colored(str(done) + "/" + str(total),"green") + " -> " + colored(url,"red") + padding)
 				else:
 					print("Visited " + colored(str(done) + "/" + str(total),"green") + " -> " + url + padding)
+		print_lock.release()	
 	lock.release()
 	return done
 
@@ -197,6 +200,7 @@ def printSummary():
 			print("Response [" + str(k) + "] -> " + str(summary[k]) + " times")
 		print("")
 		print("Output saved in '" + os.path.abspath(outputfile) + "'")
+
 
 
 if __name__ == "__main__":
