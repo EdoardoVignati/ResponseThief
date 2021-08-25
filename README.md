@@ -9,6 +9,9 @@ ResponseThief visits URLs from a list and returns the http response codes.
                |_|                                       	                               
                                        by @EdoardoVignati 
 
+
+<a href="https://www.buymeacoffee.com/edoardovignati" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee"  width="20%"></a>
+
 ## Installation
 
 ```$ pip install -r requirements.txt```
