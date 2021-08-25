@@ -61,7 +61,7 @@ The output is built in this format:
 Verbosity (`--stdout`) has 3 different levels:
 
 - `enabled` (print everything)
-- `less` (print important information)
+- `minimal` (print important information)
 - `disable` (do not print anything)
 
 ## Print on stdout
