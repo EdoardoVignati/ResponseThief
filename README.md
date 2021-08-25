@@ -23,7 +23,12 @@ Clone the repo and run:
 $ ./response-thief.py url_sample.txt result.txt
 ```
 
-where ```inputfile.txt``` is a list of URLs without the protocol and ```outputfile.txt``` is a path to an empty file.
+where `url_sample.txt` is a list of URLs without the protocol and `result.txt` is a path to an empty file.
+
+Test it with:
+```bash
+$ ./response-thief.py ./url_sample.txt result.txt 
+```
 
 Example of input file:
 
@@ -66,9 +71,9 @@ Verbosity (`--stdout`) has 3 different levels:
 
 ## Errors
 
-- [Timeout error] : cannot retrieve the webpage within 5 seconds
-- [Connection error] : cannot open or find the domain
-- [Unknown error] : don't know what's happening :)
+- `Timeout error` : cannot retrieve the webpage within 5 seconds
+- `Connection error` : cannot open or find the domain
+- `Unknown error` : don't know what's happening :)
 
 ![Demo](https://raw.githubusercontent.com/EdoardoVignati/ResponseThief/master/responsethief.png)
 
