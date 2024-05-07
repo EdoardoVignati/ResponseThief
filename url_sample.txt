@@ -1,6 +1,0 @@
-services.edoardovignati.it/responsethief/http_response_code.php?http_response_code=200
-services.edoardovignati.it/responsethief/http_response_code.php?http_response_code=201
-services.edoardovignati.it/responsethief/http_response_code.php?http_response_code=400
-services.edoardovignati.it/responsethief/http_response_code.php?http_response_code=401
-services.edoardovignati.it/responsethief/http_response_code.php?http_response_code=403
-services.edoardovignati.it/responsethief/http_response_code.php?http_response_code=500
