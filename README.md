@@ -14,11 +14,6 @@ ResponseThief visits URLs from a list and returns the http response codes.
 
 ## Installation
 
-```$ pip install -r requirements.txt```
-
-## Usage
-
-How to install:
 ```bash
 $ git clone https://github.com/EdoardoVignati/ResponseThief
 $ python3 -m venv venv
@@ -26,23 +21,21 @@ $ source venv/bin/activate
 $ pip3 install -r requirements.txt
 $ ./response-thief.py url_sample.txt result.txt
 ```
-
 where `url_sample.txt` is a list of URLs and `result.txt` is a path to an empty file.
 
-A list can be generated with [Sublist3r](https://github.com/aboul3la/Sublist3r)
-
+## Usage
 Launch it with:
 ```bash
 $ ./response-thief.py ./url_sample.txt result.txt 
 ```
 
 Example of input file:
-
 ```
 www.github.com
 github.com
 foo.bar.gitlab.com
 ```
+A list can be generated with [Sublist3r](https://github.com/aboul3la/Sublist3r)
 
 ## Filter
 
